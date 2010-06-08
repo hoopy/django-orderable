@@ -11,20 +11,14 @@
             orderCells.hide();
             
             $('div#changelist tbody').sortable({
-                items: 'tr',
+                items: '.row1, .row2',
                 handle: 'th:first',
                 update: function () {
-                    var rows = $(this).find('tr');
+                    var rows = $(this).find('.row1, .row2');
                     
                     rows.each(function (i) {
-                        var row = $(this),
-                            orderField = row.find('input[name$="-order"]'),
-                            oldValue = orderField.val(),
-                            newValue = i + 1;
-                        
-                        if (oldValue != newValue) {
-                            row.addClass('updated-order');
-                            orderField.val(i + 1);
+                        if ( $(this).find('input[id$=DELETE]').length > 0 ) {
+                            $(this).find('input[id$=order]').val(i+1);
                         }
                     });
                     
@@ -53,18 +47,18 @@
                 if (inline.is(':has(.tabular)')) {
                     // Hide the unnecessary, ordering fields.
                     inline.find('th:contains(Order)').hide();
-                    inline.find('td.original').hide();
+                    //inline.find('td.original').hide();
                     inline.find('input[name$="-order"]').closest('td').hide();
                     inline.find('tbody tr.has_original').removeClass('has_original');
                     inline.find('tbody tr').css('cursor', 'move');
                     
                     inline.find('tbody').sortable({
                         'update': function (event, ui) {
-                            var rows = inline.find('tbody tr');
+                            var rows = inline.find('.row1, .row2');
                             rows.each(function (i) {
-                                var row = $(this),
-                                    orderField = row.find('input[name$="-order"]');
-                                orderField.val(i + 1);
+                                if ( $(this).find('input[id$=DELETE]').length > 0 ) {
+                                    $(this).find('input[id$=order]').val(i+1);
+                                }
                             });
                             rows.filter(':even').addClass('row1').removeClass('row2');
                             rows.filter(':odd').addClass('row2').removeClass('row1');
